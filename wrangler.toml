@@ -1,12 +1,11 @@
 [build]
-command = "npm run build:cloudflare"
-upload.format = "directory"
+command = "npm run build"
 
 [build.upload]
 format = "service-worker"
 
 [site]
-bucket = "out"
+bucket = ".next"
 include = []
 exclude = [
   "node_modules/**/*",
@@ -20,4 +19,4 @@ route = "*julesgpt.com/*"
 
 [env.staging]
 name = "julesgpt-staging"
-route = "*julesgpt-staging.pages.dev/*"  
+route = "*julesgpt-staging.pages.dev/*" 
