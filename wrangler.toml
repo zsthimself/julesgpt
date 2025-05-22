@@ -1,25 +1,24 @@
-# Cloudflare Pages配置（服务端渲染模式）
+# Cloudflare Pages配置
 name = "julesgpt"
 
 # 指定构建输出目录
 pages_build_output_dir = ".next"
 
-# 构建配置
-[build]
-command = "npm run build"
-
-# 环境变量配置
-[vars]
-NODE_VERSION = "20.9.0"
-
 # 使用Node.js兼容性运行时
 compatibility_flags = ["nodejs_compat"]
 
-# 环境配置
-[env.production]
-name = "julesgpt-production"
-route = "*julesgpt.com/*"
+# 全局环境变量
+[vars]
+NODE_VERSION = "20.9.0"
 
-[env.staging]
-name = "julesgpt-staging"
-route = "*julesgpt-staging.pages.dev/*" 
+# 生产环境配置
+[env.production]
+# 生产环境特定变量
+[env.production.vars]
+NODE_ENV = "production"
+
+# 预览环境配置
+[env.preview]
+# 预览环境特定变量
+[env.preview.vars]
+NODE_ENV = "preview" 
