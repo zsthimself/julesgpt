@@ -1,6 +1,9 @@
 # Cloudflare Pages配置（服务端渲染模式）
 name = "julesgpt"
 
+# 指定构建输出目录
+pages_build_output_dir = ".next"
+
 # 构建配置
 [build]
 command = "npm run build"

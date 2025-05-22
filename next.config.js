@@ -13,6 +13,8 @@ const nextConfig = {
     // 在生产构建时忽略TypeScript错误
     ignoreBuildErrors: true,
   },
+  // 使用 Cloudflare Pages 服务端渲染模式，无需 output: 'export'
+  
   // 可以保留images优化配置
   images: {
     domains: ['images.clerk.dev'], // 如果使用Clerk头像
@@ -41,7 +43,7 @@ const nextConfig = {
     }
     return config;
   },
-  // 现在可以启用headers配置
+  // 启用headers配置
   async headers() {
     return [
       {
