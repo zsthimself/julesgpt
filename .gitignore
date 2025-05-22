@@ -39,14 +39,14 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-# SpecStory explanation file
+
+# SpecStory
+.specstory/
 .specstory/.what-is-this.md
 
 # Cursor rules
 .cursorrules
 .prd.md
-
-
 
 # clerk configuration (can include secrets)
 /.clerk/
