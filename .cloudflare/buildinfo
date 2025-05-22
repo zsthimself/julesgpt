@@ -1,0 +1,4 @@
+{
+  "nodeVersion": "20.9.0",
+  "buildCommand": "npm run build:cloudflare"
+} 

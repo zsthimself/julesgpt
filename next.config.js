@@ -1,4 +1,9 @@
 /** @type {import('next').NextConfig} */
+
+// 注意：此项目需要Node.js v20.9.0或更高版本
+// Note: This project requires Node.js v20.9.0 or higher
+// 在Cloudflare Pages中，请设置环境变量：NODE_VERSION=20.9.0
+
 const nextConfig = {
   eslint: {
     // 在生产构建时忽略ESLint错误

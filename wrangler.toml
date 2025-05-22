@@ -1,0 +1,23 @@
+[build]
+command = "npm run build:cloudflare"
+upload.format = "directory"
+
+[build.upload]
+format = "service-worker"
+
+[site]
+bucket = ".next"
+include = []
+exclude = [
+  "node_modules/**/*",
+  "package-lock.json",
+  "cache/**/*"
+]
+
+[env.production]
+name = "julesgpt-production"
+route = "*julesgpt.com/*"
+
+[env.staging]
+name = "julesgpt-staging"
+route = "*julesgpt-staging.pages.dev/*" 
