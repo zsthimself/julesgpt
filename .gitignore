@@ -46,7 +46,10 @@ next-env.d.ts
 
 # Cursor rules
 .cursorrules
-.prd.md
+.cursorindexingignore
+prd.md
+PROJECT_PROGRESS.md
+SUPABASE_SETUP.md
 
 # clerk configuration (can include secrets)
 /.clerk/
