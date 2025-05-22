@@ -8,12 +8,12 @@ pages_build_output_dir = ".next"
 [build]
 command = "npm run build"
 
-[build.environment]
+# 环境变量配置
+[vars]
 NODE_VERSION = "20.9.0"
 
 # 使用Node.js兼容性运行时
-[compatibility_flags]
-nodejs_compat = true
+compatibility_flags = ["nodejs_compat"]
 
 # 环境配置
 [env.production]
