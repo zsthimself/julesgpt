@@ -4,14 +4,17 @@ import toolsData from "@/lib/tools-data";
 import type { Metadata } from "next";
 
 // 定义路由参数类型
-interface ToolPageParams {
-  params: {
-    id: string;
-  };
+interface ToolParams {
+  id: string;
+}
+
+// 修复类型，使用正确的Next.js页面参数格式
+type ToolPageProps = {
+  params: ToolParams;
 }
 
 // 动态生成页面元数据
-export async function generateMetadata({ params }: ToolPageParams): Promise<Metadata> {
+export async function generateMetadata({ params }: ToolPageProps): Promise<Metadata> {
   const tool = toolsData.find(tool => tool.id === params.id);
   
   if (!tool) {
@@ -28,13 +31,13 @@ export async function generateMetadata({ params }: ToolPageParams): Promise<Meta
 }
 
 // 生成静态路径参数
-export function generateStaticParams() {
+export function generateStaticParams(): ToolParams[] {
   return toolsData.map(tool => ({
     id: tool.id,
   }));
 }
 
-export default function ToolRoute({ params }: ToolPageParams) {
+export default function ToolRoute({ params }: ToolPageProps) {
   // 查找匹配的工具
   const tool = toolsData.find(tool => tool.id === params.id);
   
