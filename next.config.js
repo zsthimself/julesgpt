@@ -15,7 +15,7 @@ const nextConfig = {
   },
   // 修改输出配置以适应Cloudflare Pages
   output: 'export',
-  // 为静态导出启用图像优化
+  // 为静态导出启用图像优化 
   images: {
     unoptimized: true,
   },

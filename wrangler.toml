@@ -20,4 +20,4 @@ route = "*julesgpt.com/*"
 
 [env.staging]
 name = "julesgpt-staging"
-route = "*julesgpt-staging.pages.dev/*" 
+route = "*julesgpt-staging.pages.dev/*"  
