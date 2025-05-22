@@ -6,6 +6,7 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "build:ci": "next build --no-lint",
+    "build:cloudflare": "rimraf .next/cache && next build --no-lint",
     "start": "next start",
     "lint": "next lint"
   },
@@ -35,6 +36,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.3.2",
+    "rimraf": "^6.0.1",
     "tailwindcss": "^4",
     "tw-animate-css": "^1.3.0",
     "typescript": "^5"

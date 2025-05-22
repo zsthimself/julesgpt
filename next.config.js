@@ -8,6 +8,40 @@ const nextConfig = {
     // 在生产构建时忽略TypeScript错误
     ignoreBuildErrors: true,
   },
+  // 自定义输出目录配置
+  output: 'standalone',
+  // 禁用webpack缓存以避免生成大型pack文件
+  webpack: (config, { dev, isServer }) => {
+    // 仅在生产构建时应用这些优化
+    if (!dev) {
+      config.cache = false;
+      
+      // 优化包大小
+      if (!isServer) {
+        config.optimization.splitChunks = {
+          chunks: 'all',
+          maxInitialRequests: 25,
+          minSize: 20000,
+          maxSize: 20 * 1024 * 1024, // 20MB限制
+        };
+      }
+    }
+    return config;
+  },
+  // 为Cloudflare Pages添加头部配置
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=3600, s-maxage=86400',
+          },
+        ],
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig; 
