@@ -5,30 +5,30 @@ import { createServerClient } from '@supabase/ssr';
 import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
-  // 从环境变量获取Clerk webhook密钥
+  // Get Clerk webhook secret from environment variables
   const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET;
   
   if (!WEBHOOK_SECRET) {
-    console.error('请设置CLERK_WEBHOOK_SECRET环境变量');
-    return new Response('Webhook密钥未配置', { status: 500 });
+    console.error('Please set CLERK_WEBHOOK_SECRET environment variable');
+    return new Response('Webhook secret not configured', { status: 500 });
   }
 
-  // 获取请求头和body
-  const headersList = headers();
+  // Get headers and body from request
+  const headersList = await headers();
   const svix_id = headersList.get('svix-id') || '';
   const svix_timestamp = headersList.get('svix-timestamp') || '';
   const svix_signature = headersList.get('svix-signature') || '';
 
-  // 如果缺少必要的头信息，返回错误
+  // Return error if required headers are missing
   if (!svix_id || !svix_timestamp || !svix_signature) {
-    return new Response('缺少svix头信息', { status: 400 });
+    return new Response('Missing svix headers', { status: 400 });
   }
 
-  // 获取请求体
+  // Get request body
   const payload = await req.json();
   const body = JSON.stringify(payload);
 
-  // 使用svix验证webhook有效性
+  // Verify webhook validity using svix
   const wh = new Webhook(WEBHOOK_SECRET);
 
   let evt: WebhookEvent;
@@ -43,11 +43,11 @@ export async function POST(req: Request) {
     return new Response('Error verifying webhook', { status: 400 });
   }
 
-  // 从事件中获取数据
+  // Get data from event
   const { id } = evt.data;
   const eventType = evt.type;
 
-  // 创建Supabase客户端
+  // Create Supabase client
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -60,7 +60,7 @@ export async function POST(req: Request) {
     }
   );
 
-  // 处理不同类型的事件
+  // Handle different types of events
   if (eventType === 'user.created' || eventType === 'user.updated') {
     const { id: clerk_id, email_addresses, username, first_name, last_name, image_url } = evt.data;
     
@@ -77,34 +77,34 @@ export async function POST(req: Request) {
       updated_at: new Date().toISOString(),
     };
 
-    // 使用upsert操作保存到Supabase
+    // Use upsert operation to save to Supabase
     const { error } = await supabase
       .from('users')
       .upsert(userData, { onConflict: 'clerk_id' });
 
     if (error) {
-      console.error('保存用户数据到Supabase失败:', error);
+      console.error('Failed to save user data to Supabase:', error);
       return NextResponse.json({ success: false, error: error.message }, { status: 500 });
     }
 
-    return NextResponse.json({ success: true, message: '用户数据已同步到Supabase' });
+    return NextResponse.json({ success: true, message: 'User data synced to Supabase' });
   }
 
   if (eventType === 'user.deleted') {
-    // 当Clerk中删除用户时，从Supabase中也删除对应用户
+    // When a user is deleted in Clerk, also delete them from Supabase
     const { error } = await supabase
       .from('users')
       .delete()
       .eq('clerk_id', id);
 
     if (error) {
-      console.error('从Supabase删除用户失败:', error);
+      console.error('Failed to delete user from Supabase:', error);
       return NextResponse.json({ success: false, error: error.message }, { status: 500 });
     }
 
-    return NextResponse.json({ success: true, message: '用户已从Supabase删除' });
+    return NextResponse.json({ success: true, message: 'User deleted from Supabase' });
   }
 
-  // 对于其他事件类型，返回成功
-  return NextResponse.json({ success: true, message: '事件已接收' });
+  // For other event types, return success
+  return NextResponse.json({ success: true, message: 'Event received' });
 } 

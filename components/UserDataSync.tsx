@@ -7,13 +7,13 @@ export default function UserDataSync() {
   const { isSignedIn, isLoaded } = useUser();
   
   useEffect(() => {
-    // 当用户登录状态加载完成并且已登录时，触发数据同步
+    // Sync user data when user is loaded and signed in
     if (isLoaded && isSignedIn) {
       syncUserData();
     }
   }, [isLoaded, isSignedIn]);
   
-  // 同步用户数据到Supabase
+  // Sync user data to Supabase
   const syncUserData = async () => {
     try {
       const response = await fetch('/sync-user', {
@@ -23,18 +23,43 @@ export default function UserDataSync() {
         },
       });
       
-      const data = await response.json();
+      // Check if response is successful
+      if (!response.ok) {
+        console.error('Failed to sync user data:', response.statusText);
+        return;
+      }
+      
+      // Check response content type
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        console.error('Failed to sync user data: Server did not return JSON');
+        return;
+      }
+      
+      // Safely parse JSON
+      const text = await response.text();
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        console.error('Failed to parse server response:', e);
+        console.error('Raw response content:', text);
+        return;
+      }
       
       if (!data.success) {
-        console.error('同步用户数据失败:', data.message);
+        console.error('User data sync failed:', data.message || 'Unknown error');
+        if (data.error) {
+          console.error('Error details:', data.error);
+        }
       } else {
-        console.log('用户数据同步成功');
+        console.log('User data sync successful');
       }
     } catch (error) {
-      console.error('同步请求出错:', error);
+      console.error('Error during sync request:', error);
     }
   };
   
-  // 这个组件不会渲染任何内容
+  // This component doesn't render any content
   return null;
 } 
