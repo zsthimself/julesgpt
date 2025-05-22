@@ -8,17 +8,19 @@ pages_build_output_dir = ".next"
 compatibility_flags = ["nodejs_compat"]
 
 # 全局环境变量
-[vars]
-NODE_VERSION = "20.9.0"
+# [vars] # 你可以将此节整个移除，如果 NODE_VERSION 是唯一的全局变量
+# NODE_VERSION = "20.9.0" # 已移至特定环境
 
 # 生产环境配置
 [env.production]
 # 生产环境特定变量
 [env.production.vars]
 NODE_ENV = "production"
+NODE_VERSION = "20.9.0" # 将 NODE_VERSION 添加到这里
 
 # 预览环境配置
 [env.preview]
 # 预览环境特定变量
 [env.preview.vars]
-NODE_ENV = "preview" 
+NODE_ENV = "preview"
+NODE_VERSION = "20.9.0" # 建议也为预览环境指定 NODE_VERSION，以保持一致性
