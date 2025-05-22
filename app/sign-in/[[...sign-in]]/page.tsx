@@ -8,15 +8,15 @@ export default function SignInPage() {
       <div className="w-full max-w-md space-y-8">
         <div className="text-center">
           <h2 className="text-3xl font-bold tracking-tight text-gray-900">
-            登录您的账户
+            Sign in to your account
           </h2>
           <p className="mt-2 text-sm text-gray-600">
-            或{" "}
+            Or{" "}
             <a
               href="/sign-up"
               className="font-medium text-blue-600 hover:text-blue-500"
             >
-              创建新账户
+              create a new account
             </a>
           </p>
         </div>

@@ -1,18 +1,18 @@
+# Cloudflare Pages配置（服务端渲染模式）
+name = "julesgpt"
+
+# 构建配置
 [build]
 command = "npm run build"
 
-[build.upload]
-format = "service-worker"
+[build.environment]
+NODE_VERSION = "20.9.0"
 
-[site]
-bucket = ".next"
-include = []
-exclude = [
-  "node_modules/**/*",
-  "package-lock.json",
-  "cache/**/*"
-]
+# 使用Node.js兼容性运行时
+[compatibility_flags]
+nodejs_compat = true
 
+# 环境配置
 [env.production]
 name = "julesgpt-production"
 route = "*julesgpt.com/*"

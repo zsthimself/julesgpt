@@ -13,11 +13,15 @@ const nextConfig = {
     // 在生产构建时忽略TypeScript错误
     ignoreBuildErrors: true,
   },
-  // 修改输出配置以适应Cloudflare Pages
-  output: 'export',
-  // 为静态导出启用图像优化 
+  // 可以保留images优化配置
   images: {
-    unoptimized: true,
+    domains: ['images.clerk.dev'], // 如果使用Clerk头像
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+    ],
   },
   // 禁用webpack缓存以避免生成大型pack文件
   webpack: (config, { dev, isServer }) => {
@@ -37,7 +41,7 @@ const nextConfig = {
     }
     return config;
   },
-  // 为Cloudflare Pages添加头部配置
+  // 现在可以启用headers配置
   async headers() {
     return [
       {

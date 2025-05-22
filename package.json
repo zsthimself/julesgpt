@@ -5,9 +5,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
-    "build:ci": "next build --no-lint",
-    "build:cloudflare": "rimraf .next out && next build --no-lint", 
-    "clean": "rimraf .next out",
+    "clean": "rimraf .next",
     "start": "next start",
     "lint": "next lint"
   },
