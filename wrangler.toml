@@ -6,7 +6,7 @@ upload.format = "directory"
 format = "service-worker"
 
 [site]
-bucket = ".next"
+bucket = "out"
 include = []
 exclude = [
   "node_modules/**/*",

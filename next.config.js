@@ -13,8 +13,12 @@ const nextConfig = {
     // 在生产构建时忽略TypeScript错误
     ignoreBuildErrors: true,
   },
-  // 自定义输出目录配置
-  output: 'standalone',
+  // 修改输出配置以适应Cloudflare Pages
+  output: 'export',
+  // 为静态导出启用图像优化
+  images: {
+    unoptimized: true,
+  },
   // 禁用webpack缓存以避免生成大型pack文件
   webpack: (config, { dev, isServer }) => {
     // 仅在生产构建时应用这些优化

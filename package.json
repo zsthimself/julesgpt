@@ -6,8 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "build:ci": "next build --no-lint",
-    "build:cloudflare": "rimraf .next/cache && next build --no-lint",
-    "clean": "rimraf .next",
+    "build:cloudflare": "rimraf .next out && next build --no-lint",
+    "clean": "rimraf .next out",
     "start": "next start",
     "lint": "next lint"
   },
