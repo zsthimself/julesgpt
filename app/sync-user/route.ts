@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { syncUserToSupabase } from '@/lib/sync-user';
+import { syncUserToSupabase } from '../../lib/sync-user';
 import { auth } from '@clerk/nextjs/server';
 
 export async function GET(request: Request) {

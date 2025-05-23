@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import MainLayout from "@/components/layout/MainLayout";
-import StagewiseProvider from "@/components/StagewiseProvider";
+import MainLayout from "../components/layout/MainLayout";
+import StagewiseProvider from "../components/StagewiseProvider";
 import { ClerkProvider } from "@clerk/nextjs";
-import UserDataSync from "@/components/UserDataSync";
+import UserDataSync from "../components/UserDataSync";
 
 const inter = Inter({ subsets: ["latin"] });
 

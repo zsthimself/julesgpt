@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
-import ToolPage from "@/components/tools/ToolPage";
-import toolsData from "@/lib/tools-data";
+import ToolPage from "../../../components/tools/ToolPage";
+import toolsData from "../../../lib/tools-data";
 import type { Metadata } from "next";
 
 // 定义路由参数类型

@@ -32,6 +32,28 @@ export async function syncUserToSupabase() {
     // Create Supabase client
     const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
+    // First, check if uuid-ossp extension is enabled
+    const { data: extensionData, error: extensionError } = await supabase.rpc('uuid_generate_v4');
+    
+    if (extensionError) {
+      console.log('Checking if uuid extension is available...');
+      // Try enabling the extension
+      try {
+        const { error: createExtError } = await supabase.rpc('create_uuid_extension');
+        if (createExtError) {
+          console.error('Error enabling uuid-ossp extension:', createExtError);
+          return { 
+            success: false, 
+            message: 'UUID extension not available', 
+            error: createExtError.message 
+          };
+        }
+      } catch (extErr) {
+        console.log('Extension check failed, proceeding anyway:', extErr);
+        // Continue with the sync process even if we couldn't check the extension
+      }
+    }
+
     // Check if the users table exists
     const { error: tableCheckError, count } = await supabase
       .from('users')
@@ -39,6 +61,16 @@ export async function syncUserToSupabase() {
       
     if (tableCheckError) {
       console.error('Error checking users table:', tableCheckError);
+      
+      // Try to provide more detailed error information
+      if (tableCheckError.message.includes('does not exist')) {
+        return { 
+          success: false, 
+          message: 'Users table does not exist - please run the database setup script', 
+          error: tableCheckError.message 
+        };
+      }
+      
       return { 
         success: false, 
         message: 'Failed to verify users table exists', 
@@ -65,13 +97,34 @@ export async function syncUserToSupabase() {
       username: userData.username
     });
 
+    // Save user data to Supabase using service role client if available
+    let serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    let clientToUse = supabase;
+    
+    if (serviceRoleKey) {
+      console.log('Using service role key for database operations');
+      clientToUse = createClient(supabaseUrl, serviceRoleKey);
+    } else {
+      console.log('No service role key available, using anon key');
+    }
+
     // Save user data to Supabase
-    const { error } = await supabase
+    const { error } = await clientToUse
       .from('users')
       .upsert(userData, { onConflict: 'clerk_id' });
 
     if (error) {
       console.error('Failed to sync user data to Supabase:', error);
+      
+      // Try to provide more detailed error information
+      if (error.message.includes('permission denied')) {
+        return { 
+          success: false, 
+          message: 'Permission denied - check RLS policies or use service role key', 
+          error: error.message 
+        };
+      }
+      
       return { success: false, message: 'Database error while syncing user', error: error.message };
     }
 

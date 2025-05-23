@@ -1,5 +1,5 @@
 import Link from "next/link";
-import toolsData from "@/lib/tools-data";
+import toolsData from "../lib/tools-data";
 import * as LucideIcons from "lucide-react";
 
 export default function Home() {
