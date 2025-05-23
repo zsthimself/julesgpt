@@ -65,10 +65,6 @@ const nextConfig = {
       },
     ];
   },
-  // 添加实验性配置以确保模块兼容性
-  experimental: {
-    esmExternals: 'loose',
-  }
 };
 
 module.exports = nextConfig; 
