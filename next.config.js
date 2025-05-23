@@ -4,6 +4,8 @@
 // Note: This project requires Node.js v20.9.0 or higher
 // 在Cloudflare Pages中，请设置环境变量：NODE_VERSION=20.9.0
 
+const path = require('path');
+
 const nextConfig = {
   eslint: {
     // 在生产构建时忽略ESLint错误
@@ -25,8 +27,14 @@ const nextConfig = {
       },
     ],
   },
-  // 禁用webpack缓存以避免生成大型pack文件
+  // 修改webpack配置以解决构建问题
   webpack: (config, { dev, isServer }) => {
+    // 添加路径别名配置
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@': path.resolve(__dirname),
+    };
+    
     // 仅在生产构建时应用这些优化
     if (!dev) {
       config.cache = false;
@@ -57,6 +65,10 @@ const nextConfig = {
       },
     ];
   },
+  // 添加实验性配置以确保模块兼容性
+  experimental: {
+    esmExternals: 'loose',
+  }
 };
 
 module.exports = nextConfig; 
