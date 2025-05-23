@@ -2,9 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-@custom-variant dark (&:is(.dark *));
+/* 删除可能有问题的自定义变体 */
+/* @custom-variant dark (&:is(.dark *)); */
 
-  @theme inline {
+/* 使用标准CSS变量替代@theme内联 */
+:root {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
