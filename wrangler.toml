@@ -7,20 +7,13 @@ pages_build_output_dir = ".next"
 # 使用Node.js兼容性运行时
 compatibility_flags = ["nodejs_compat"]
 
-# 构建命令
-[build]
-command = "npm install --legacy-peer-deps && npm run build"
-
-# 全局环境变量
-[vars]
-NPM_FLAGS = "--include=dev"
-
 # 生产环境配置
 [env.production]
 # 生产环境特定变量
 [env.production.vars]
 NODE_ENV = "production"
 NODE_VERSION = "20.9.0"
+NPM_FLAGS = "--legacy-peer-deps"
 
 # 预览环境配置
 [env.preview]
@@ -28,3 +21,4 @@ NODE_VERSION = "20.9.0"
 [env.preview.vars]
 NODE_ENV = "preview"
 NODE_VERSION = "20.9.0"
+NPM_FLAGS = "--legacy-peer-deps"
