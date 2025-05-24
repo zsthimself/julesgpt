@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
-import { createClient } from '@/lib/supabase/server';
 
 // Cloudflare Pages要求所有非静态路由都必须使用Edge Runtime
 export const runtime = 'edge';
@@ -22,36 +21,13 @@ export async function GET(request: Request) {
       );
     }
 
-    // Cloudflare Pages环境中提供降级功能
-    if (isCloudflarePages) {
-      console.log('在Cloudflare Pages环境中运行，提供基本功能');
-      // 返回成功但不执行数据库操作
-      return NextResponse.json({ 
-        success: true,
-        environment: 'edge',
-        message: '在Edge环境中数据同步功能有限'
-      });
-    }
-    
-    // 在Node.js环境中执行完整功能
-    const supabase = await createClient();
-    
-    // 同步用户数据
-    const { error } = await supabase
-      .from('users')
-      .upsert({ 
-        id: userId,
-        last_seen: new Date().toISOString() 
-      }, { 
-        onConflict: 'id'
-      });
-    
-    if (error) throw error;
-    
+    // 返回成功状态，但告知客户端它应该使用客户端同步
     return NextResponse.json({ 
       success: true,
-      environment: 'node'
+      environment: 'edge',
+      message: '请使用客户端同步方法，服务器端同步在Edge环境中不可用'
     });
+    
   } catch (error: any) {
     console.error('同步用户数据错误:', error);
     return NextResponse.json(
