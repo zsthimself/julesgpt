@@ -35,13 +35,6 @@ export async function generateMetadata({ params }: ToolPageProps): Promise<Metad
   };
 }
 
-// 生成静态路径参数
-export function generateStaticParams(): ToolParams[] {
-  return toolsData.map(tool => ({
-    id: tool.id,
-  }));
-}
-
 export default function ToolRoute({ params }: ToolPageProps) {
   // 查找匹配的工具
   const tool = toolsData.find(tool => tool.id === params.id);
