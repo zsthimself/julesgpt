@@ -2,12 +2,17 @@ import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import { createClient } from '@/lib/supabase/server';
 
-// 保留Edge Runtime配置
-export const runtime = 'edge';
+// 移除runtime声明，让Next.js自动选择合适的环境
+// export const runtime = 'edge';
+
+// 检测是否在Cloudflare Pages环境中运行
+const isCloudflarePages = process.env.CF_PAGES === 'true' || 
+                          typeof process.env.NEXT_RUNTIME === 'string' && 
+                          process.env.NEXT_RUNTIME === 'edge';
 
 export async function GET(request: Request) {
   try {
-    // 获取Clerk用户信息 - 在Edge环境中是异步的
+    // 获取Clerk用户信息
     const { userId } = await auth();
     
     if (!userId) {
@@ -16,9 +21,19 @@ export async function GET(request: Request) {
         { status: 401 }
       );
     }
+
+    // Cloudflare Pages环境中提供降级功能
+    if (isCloudflarePages) {
+      console.log('在Cloudflare Pages环境中运行，提供基本功能');
+      // 返回成功但不执行数据库操作
+      return NextResponse.json({ 
+        success: true,
+        environment: 'edge',
+        message: '在Edge环境中数据同步功能有限'
+      });
+    }
     
-    // 使用已经配置好的服务器端Supabase客户端
-    // 我们已知createClient是异步的，所以要await
+    // 在Node.js环境中执行完整功能
     const supabase = await createClient();
     
     // 同步用户数据
@@ -33,7 +48,10 @@ export async function GET(request: Request) {
     
     if (error) throw error;
     
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ 
+      success: true,
+      environment: 'node'
+    });
   } catch (error: any) {
     console.error('同步用户数据错误:', error);
     return NextResponse.json(

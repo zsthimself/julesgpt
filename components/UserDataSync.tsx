@@ -9,6 +9,7 @@ const SYNC_ENABLED = true;
 export default function UserDataSync() {
   const { isSignedIn, isLoaded } = useUser();
   const [syncAttempts, setSyncAttempts] = useState(0);
+  const [environment, setEnvironment] = useState<string | null>(null);
   
   useEffect(() => {
     if (!SYNC_ENABLED) return; // 如果禁用则跳过
@@ -84,6 +85,17 @@ export default function UserDataSync() {
         }
       } else {
         console.log('用户数据同步成功');
+        
+        // 保存环境信息，可以根据需要显示给用户
+        if (data.environment) {
+          setEnvironment(data.environment);
+          console.log(`运行环境: ${data.environment}`);
+          
+          // 如果在edge环境中运行，显示相关消息
+          if (data.environment === 'edge' && data.message) {
+            console.log(`消息: ${data.message}`);
+          }
+        }
       }
     } catch (error) {
       console.error('同步请求过程中出错:', error);

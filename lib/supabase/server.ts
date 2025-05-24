@@ -5,8 +5,37 @@ import 'server-only'
 
 export const dynamic = 'force-dynamic'
 
-export const createClient = cache(async () => {
-  // 由于cookies()现在是异步函数，我们需要await它
+// 检测是否在Cloudflare Pages环境中运行
+const isCloudflarePages = process.env.CF_PAGES === 'true' || 
+                          typeof process.env.NEXT_RUNTIME === 'string' && 
+                          process.env.NEXT_RUNTIME === 'edge';
+
+// 创建适合Edge环境的简化客户端
+const createEdgeClient = cache(async () => {
+  return createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      // 提供一个简化的cookie处理器，避免使用async_hooks
+      cookies: {
+        get(name) {
+          // Edge环境中简化的cookie获取
+          return null;
+        },
+        set() {
+          // 空实现
+        },
+        remove() {
+          // 空实现
+        }
+      }
+    }
+  )
+})
+
+// 创建完整功能的Node.js客户端
+const createNodeClient = cache(async () => {
+  // 在Node.js环境中，cookies()函数是异步的
   const cookieStore = await cookies()
   
   return createServerClient(
@@ -19,25 +48,22 @@ export const createClient = cache(async () => {
         },
         set(name, value, options) {
           try {
-            // 现在cookieStore已经是非Promise对象，可以直接调用
             cookieStore.set({ name, value, ...options })
           } catch (error) {
-            // 在边缘运行时中或Server Component中，cookies.set可能会抛出错误
-            // 这可以被忽略，因为我们在中间件中已不再调用updateSession
-            console.error('Cookie set error (可在Edge环境中忽略):', error)
+            console.error('Cookie set error:', error)
           }
         },
         remove(name, options) {
           try {
-            // 现在cookieStore已经是非Promise对象，可以直接调用
             cookieStore.set({ name, value: '', ...options })
           } catch (error) {
-            // 在边缘运行时中或Server Component中，cookies.remove可能会抛出错误
-            // 这可以被忽略，因为我们在中间件中已不再调用updateSession
-            console.error('Cookie remove error (可在Edge环境中忽略):', error)
+            console.error('Cookie remove error:', error)
           }
-        },
-      },
+        }
+      }
     }
   )
-}) 
+})
+
+// 导出适合当前环境的客户端创建函数
+export const createClient = isCloudflarePages ? createEdgeClient : createNodeClient; 
