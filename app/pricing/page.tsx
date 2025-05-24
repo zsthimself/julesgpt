@@ -2,6 +2,9 @@ import { Check } from "lucide-react";
 import Link from "next/link";
 import type { Metadata } from "next";
 
+// 添加动态配置，防止预渲染错误
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: "Pricing - AI Toolbox",
   description: "Choose the plan that fits your needs. Upgrade to unlock additional features and higher usage limits.",
