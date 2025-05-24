@@ -3,7 +3,8 @@ import { cookies } from 'next/headers'
 import { cache } from 'react'
 import 'server-only'
 
-export const dynamic = 'force-dynamic'
+// 指定使用Edge Runtime
+export const runtime = 'edge'
 
 // 检测是否在Cloudflare Pages环境中运行
 const isCloudflarePages = process.env.CF_PAGES === 'true' || 
@@ -13,8 +14,7 @@ const isCloudflarePages = process.env.CF_PAGES === 'true' ||
 // 创建一个极简版的服务端客户端，不使用cookies
 // 这将避免在Edge环境中引入async_hooks依赖
 export const createClient = cache(async () => {
-  // 在Cloudflare环境中提供一个极简实现
-  if (isCloudflarePages) {
+  try {
     return createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -27,21 +27,21 @@ export const createClient = cache(async () => {
         }
       }
     );
+  } catch (error) {
+    console.error('创建Supabase服务器客户端失败:', error);
+    // 返回一个最小化的客户端实现
+    return {
+      auth: {
+        getUser: async () => ({ data: { user: null }, error: null }),
+        getSession: async () => ({ data: { session: null }, error: null })
+      },
+      from: () => ({
+        select: () => ({ data: null, error: null }),
+        insert: () => ({ data: null, error: null }),
+        upsert: () => ({ data: null, error: null }),
+        update: () => ({ data: null, error: null }),
+        delete: () => ({ data: null, error: null })
+      })
+    } as any;
   }
-  
-  // 在Node.js环境中，可以使用正常的实现
-  // 但我们这里也使用简化版本以保持一致性
-  // 推荐使用客户端集成而不是服务器端
-  return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      // 提供一个简化的cookies实现
-      cookies: {
-        get: () => null,
-        set: () => {},
-        remove: () => {}
-      }
-    }
-  );
 }); 

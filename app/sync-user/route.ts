@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 
-// Cloudflare Pages要求所有非静态路由都必须使用Edge Runtime
+// 指定使用Edge Runtime
 export const runtime = 'edge';
 
 // 检测是否在Cloudflare Pages环境中运行
@@ -25,6 +25,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ 
       success: true,
       environment: 'edge',
+      userId,
       message: '请使用客户端同步方法，服务器端同步在Edge环境中不可用'
     });
     
