@@ -10,15 +10,10 @@ export async function middleware(request: NextRequest) {
   return response;
 }
 
-// 可选：配置哪些路径需要应用中间件
+// 使用简单的matcher配置，避免使用捕获组
 export const config = {
   matcher: [
-    /*
-     * 匹配所有路径除了:
-     * - api 路由
-     * - _next (Next.js内部文件)
-     * - .*\\.(.*)$ (带扩展名的文件，如静态文件)
-     */
-    '/((?!api|_next|.*\\.(.*)$).*)',
+    '/',
+    '/:path*',
   ],
 }; 
