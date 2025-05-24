@@ -3,8 +3,8 @@ import { cookies } from 'next/headers'
 import { cache } from 'react'
 import 'server-only'
 
-// 指定使用Experimental Edge Runtime
-export const runtime = 'experimental-edge'
+// 指定使用Edge Runtime
+export const runtime = 'edge'
 
 // 检测是否在Cloudflare Pages环境中运行
 const isCloudflarePages = process.env.CF_PAGES === 'true' || 
