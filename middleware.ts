@@ -1,13 +1,11 @@
 import { NextResponse, type NextRequest } from 'next/server'
 
-
-export const runtime = 'experimental-edge';
-
-// 在Cloudflare Pages部署时先移除runtime配置
+// 我们不需要显式设置runtime，让Next.js自动选择合适的运行时
+// Cloudflare Pages环境下不支持async_hooks模块
 
 export async function middleware(request: NextRequest) {
-  // 简化中间件，不使用Supabase会话更新
-  // 这样可以避免Edge Runtime中的兼容性问题
+  // 不使用任何可能依赖Node.js特有模块的操作
+  // 特别是避免使用createClient或updateSession等操作
   return NextResponse.next();
 }
 

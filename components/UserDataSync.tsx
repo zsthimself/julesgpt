@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useUser } from '@clerk/nextjs';
 
-const SYNC_ENABLED = true; // 重新启用同步功能
+// 保持同步功能启用
+const SYNC_ENABLED = true;
 
 export default function UserDataSync() {
   const { isSignedIn, isLoaded } = useUser();
@@ -29,7 +30,7 @@ export default function UserDataSync() {
   // Sync user data to Supabase
   const syncUserData = async () => {
     try {
-      console.log('Attempting to sync user data...');
+      console.log('同步用户数据到Supabase...');
       
       const response = await fetch('/sync-user', {
         method: 'GET',
@@ -40,7 +41,7 @@ export default function UserDataSync() {
       
       // Check if response is successful
       if (!response.ok) {
-        console.error('Failed to sync user data:', response.statusText);
+        console.error('同步用户数据失败:', response.statusText);
         
         // Don't retry on 401 (not authenticated) or 403 (forbidden)
         if (response.status !== 401 && response.status !== 403) {
@@ -52,7 +53,7 @@ export default function UserDataSync() {
       // Check response content type
       const contentType = response.headers.get('content-type');
       if (!contentType || !contentType.includes('application/json')) {
-        console.error('Failed to sync user data: Server did not return JSON');
+        console.error('同步用户数据失败: 服务器未返回JSON');
         retrySyncAfterDelay();
         return;
       }
@@ -63,16 +64,16 @@ export default function UserDataSync() {
       try {
         data = JSON.parse(text);
       } catch (e) {
-        console.error('Failed to parse server response:', e);
-        console.error('Raw response content:', text);
+        console.error('解析服务器响应失败:', e);
+        console.error('原始响应内容:', text);
         retrySyncAfterDelay();
         return;
       }
       
       if (!data.success) {
-        console.error('User data sync failed:', data.message || 'Unknown error');
+        console.error('用户数据同步失败:', data.message || '未知错误');
         if (data.error) {
-          console.error('Error details:', data.error);
+          console.error('错误详情:', data.error);
         }
         
         // Retry for certain types of errors
@@ -82,10 +83,10 @@ export default function UserDataSync() {
           retrySyncAfterDelay(10000); // Longer delay for infrastructure issues
         }
       } else {
-        console.log('User data sync successful');
+        console.log('用户数据同步成功');
       }
     } catch (error) {
-      console.error('Error during sync request:', error);
+      console.error('同步请求过程中出错:', error);
       retrySyncAfterDelay();
     }
   };

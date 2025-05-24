@@ -1,8 +1,11 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
-export const runtime = 'edge';
+// 移除runtime声明，让Next.js自动选择合适的运行时
+// export const runtime = 'edge';
 
+// 此函数在Cloudflare Pages环境中会导致依赖async_hooks模块
+// 我们已在主middleware中不再调用它，保留此函数仅作参考
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({
     request: {
@@ -22,40 +25,14 @@ export async function updateSession(request: NextRequest) {
     return response;
   }
 
-  const supabase = createServerClient(
-    supabaseUrl,
-    supabaseAnonKey,
-    {
-      cookies: {
-        get(name) {
-          return request.cookies.get(name)?.value
-        },
-        set(name, value, options) {
-          // 设置到响应中，供浏览器使用
-          response.cookies.set({
-            name,
-            value,
-            ...options,
-          })
-        },
-        remove(name, options) {
-          response.cookies.set({
-            name,
-            value: '',
-            ...options,
-          })
-        },
-      },
-    }
-  )
-
+  // 注意：下面的代码在Cloudflare Pages环境中可能会导致错误
+  // 因为它依赖于Node.js的async_hooks模块
+  
   try {
-    // 只读取会话信息，不进行复杂操作
-    const { data } = await supabase.auth.getSession();
-    // 不要尝试修改request.cookies，这可能导致Edge Runtime错误
+    // 仅模拟会话检查，不实际执行Supabase操作
+    console.log('会话检查被跳过，避免Edge Runtime兼容性问题');
   } catch (error) {
     console.error('Supabase会话更新失败:', error);
-    // 出错时不影响请求继续进行
   }
 
   return response

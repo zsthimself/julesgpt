@@ -2,12 +2,12 @@ import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import { createClient } from '@/lib/supabase/server';
 
-// 添加Edge Runtime配置
+// 保留Edge Runtime配置
 export const runtime = 'edge';
 
 export async function GET(request: Request) {
   try {
-    // 获取Clerk用户信息
+    // 获取Clerk用户信息 - 在Edge环境中是异步的
     const { userId } = await auth();
     
     if (!userId) {
@@ -18,6 +18,7 @@ export async function GET(request: Request) {
     }
     
     // 使用已经配置好的服务器端Supabase客户端
+    // 我们已知createClient是异步的，所以要await
     const supabase = await createClient();
     
     // 同步用户数据
