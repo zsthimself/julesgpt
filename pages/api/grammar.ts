@@ -1,3 +1,6 @@
+// 添加Edge Runtime配置
+export const runtime = 'edge';
+
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { checkGrammar } from '@/lib/gemini-api';
 
