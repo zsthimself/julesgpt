@@ -4,6 +4,9 @@ import { WebhookEvent } from '@clerk/nextjs/server';
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse } from 'next/server';
 
+// 添加Edge Runtime配置
+export const runtime = 'edge';
+
 export async function POST(req: Request) {
   // Get Clerk webhook secret from environment variables
   const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET;

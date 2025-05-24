@@ -1,6 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { detectAIContent } from '@/lib/gemini-api';
 
+// 添加Edge Runtime配置
+export const runtime = 'edge';
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ status: 'error', message: '仅支持POST请求' });

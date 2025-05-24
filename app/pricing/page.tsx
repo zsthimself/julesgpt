@@ -4,6 +4,8 @@ import type { Metadata } from "next";
 
 // 添加动态配置，防止预渲染错误
 export const dynamic = 'force-dynamic';
+// 添加Edge Runtime配置
+export const runtime = 'edge';
 
 export const metadata: Metadata = {
   title: "Pricing - AI Toolbox",

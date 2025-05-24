@@ -2,6 +2,9 @@ import Link from "next/link";
 import toolsData from "../lib/tools-data";
 import * as LucideIcons from "lucide-react";
 
+// 添加Edge Runtime配置
+export const runtime = 'edge';
+
 export default function Home() {
   const getIcon = (iconName: string) => {
     const IconComponent = LucideIcons[iconName as keyof typeof LucideIcons] as React.ComponentType<{ size?: number }>;

@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server';
 import { syncUserToSupabase } from '../../lib/sync-user';
 import { auth } from '@clerk/nextjs/server';
 
+// 添加Edge Runtime配置
+export const runtime = 'edge';
+
 export async function GET(request: Request) {
   try {
     // 检查用户是否已登录

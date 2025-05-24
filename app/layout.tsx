@@ -8,6 +8,8 @@ import UserDataSync from "../components/UserDataSync";
 
 // 添加动态配置，防止预渲染错误
 export const dynamic = 'force-dynamic';
+// 添加Edge Runtime配置
+export const runtime = 'edge';
 
 const inter = Inter({ subsets: ["latin"] });
 

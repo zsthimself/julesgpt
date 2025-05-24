@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
+// 添加Edge Runtime配置
+export const runtime = 'edge';
+
 export default function NotFound() {
   return (
     <div className="min-h-[calc(100vh-16rem)] flex items-center justify-center">
