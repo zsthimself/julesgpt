@@ -1,17 +1,11 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { updateSession } from './lib/supabase/middleware'
+
+export const runtime = 'edge';
 
 export async function middleware(request: NextRequest) {
-  try {
-    return await updateSession(request);
-  } catch (error) {
-    console.error('中间件错误:', error);
-    return NextResponse.next({
-      request: {
-        headers: request.headers,
-      },
-    });
-  }
+  // 简化中间件，不使用Supabase会话更新
+  // 这样可以避免Edge Runtime中的兼容性问题
+  return NextResponse.next();
 }
 
 export const config = {

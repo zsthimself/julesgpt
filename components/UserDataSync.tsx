@@ -3,11 +3,15 @@
 import { useEffect, useState } from 'react';
 import { useUser } from '@clerk/nextjs';
 
+const SYNC_ENABLED = true; // 重新启用同步功能
+
 export default function UserDataSync() {
   const { isSignedIn, isLoaded } = useUser();
   const [syncAttempts, setSyncAttempts] = useState(0);
   
   useEffect(() => {
+    if (!SYNC_ENABLED) return; // 如果禁用则跳过
+    
     // Sync user data when user is loaded and signed in
     if (isLoaded && isSignedIn) {
       syncUserData();

@@ -17,7 +17,6 @@
     "@google/generative-ai": "^0.24.1",
     "@radix-ui/react-slot": "^1.2.2",
     "@stagewise/toolbar-next": "^0.1.2",
-    "@supabase/auth-helpers-nextjs": "^0.10.0",
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.49.8",
     "autoprefixer": "^10.4.18",
