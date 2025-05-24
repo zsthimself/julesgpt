@@ -1,8 +1,11 @@
 # Cloudflare Pages配置
 name = "julesgpt"
 
-# 指定构建输出目录
-pages_build_output_dir = ".next"
+# 修改输出目录 - 从.next改为.vercel/output/static
+pages_build_output_dir = ".vercel/output/static"
+
+# 添加兼容性日期
+compatibility_date = "2024-05-23"
 
 # 使用Node.js兼容性运行时
 compatibility_flags = ["nodejs_compat"]
