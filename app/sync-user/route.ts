@@ -2,8 +2,8 @@ import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import { createClient } from '@/lib/supabase/server';
 
-// 移除runtime声明，让Next.js自动选择合适的环境
-// export const runtime = 'edge';
+// Cloudflare Pages要求所有非静态路由都必须使用Edge Runtime
+export const runtime = 'edge';
 
 // 检测是否在Cloudflare Pages环境中运行
 const isCloudflarePages = process.env.CF_PAGES === 'true' || 
