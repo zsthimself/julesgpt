@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server';
 
-// Cloudflare Pages要求中间件使用Edge Runtime
-export const runtime = 'edge';
+// Cloudflare Pages要求中间件使用特定的experimental-edge Runtime
+export const runtime = 'experimental-edge';
 
 // 检测是否在Cloudflare Pages环境中运行
 const isCloudflarePages = process.env.CF_PAGES === 'true' || 
