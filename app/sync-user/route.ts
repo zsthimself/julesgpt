@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 
-// 指定使用Edge Runtime
-export const runtime = 'edge';
+// 指定使用Experimental Edge Runtime
+export const runtime = 'experimental-edge';
 
 // 检测是否在Cloudflare Pages环境中运行
 const isCloudflarePages = process.env.CF_PAGES === 'true' || 
