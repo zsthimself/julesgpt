@@ -1,6 +1,9 @@
 import { NextResponse, type NextRequest } from 'next/server'
 
-export const runtime = 'edge';
+
+export const runtime = 'experimental-edge';
+
+// 在Cloudflare Pages部署时先移除runtime配置
 
 export async function middleware(request: NextRequest) {
   // 简化中间件，不使用Supabase会话更新
