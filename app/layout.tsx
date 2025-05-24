@@ -6,6 +6,9 @@ import StagewiseProvider from "../components/StagewiseProvider";
 import { ClerkProvider } from "@clerk/nextjs";
 import UserDataSync from "../components/UserDataSync";
 
+// 添加动态配置，防止预渲染错误
+export const dynamic = 'force-dynamic';
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {

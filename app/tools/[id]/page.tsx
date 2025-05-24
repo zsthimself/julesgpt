@@ -3,6 +3,9 @@ import ToolPage from "../../../components/tools/ToolPage";
 import toolsData from "../../../lib/tools-data";
 import type { Metadata } from "next";
 
+// 添加动态配置，防止预渲染错误
+export const dynamic = 'force-dynamic';
+
 // 定义路由参数类型
 interface ToolParams {
   id: string;
